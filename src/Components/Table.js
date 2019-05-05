@@ -19,16 +19,16 @@ function Table(props) {
         </thead>
 
         <tbody>
-          { (props.query === "") ? (
-              rows.map((item, idx) => (
-            <tr key={idx}>
+
+          { rows.map((item, idx) => (
+            <tr key={item.id}>
               <td>
                 {idx}
               </td>
 
               {fieldNames.map((fieldName, i) => (
-                <td key={i}>
-                  { editedRowId === idx ? (
+                <td key={fieldName}>
+                  { editedRowId === item.id ? (
                     <input
                       type="text"
                       name={fieldName}
@@ -46,16 +46,16 @@ function Table(props) {
               ))}
 
               <td>
-                { editedRowId !== idx ? (
+                { editedRowId !== item.id ? (
                   <button
-                    onClick={props.editRow(idx)}
+                    onClick={props.editRow(item.id)}
                     className="buttons"
                   >
                     <i className="far fa-edit edit-button"></i>
                   </button>
                 ) : (
                   <button
-                    onClick={props.saveRow(idx)}
+                    onClick={props.saveRow(item.id)}
                     className="buttons save-button"
                   >
                     <i className="fa fa-save"></i>
@@ -65,70 +65,14 @@ function Table(props) {
 
               <td>
                 <button
-                  onClick={props.deleteRow(idx)}
+                  onClick={props.deleteRow(item.id)}
                   className="buttons delete-button"
                 >
                   <i className="far fa-trash-alt"></i>
                 </button>
               </td>
             </tr>
-          ))
-          ) : (
-            rows.filter( (row) => row["name"].includes(props.query) ).map((item, idx) => (
-            <tr key={idx}>
-              <td>
-                {idx}
-              </td>
-
-              {fieldNames.map((fieldName, i) => (
-                <td key={i}>
-                  { editedRowId === item.idx ? (
-                    <input
-                      type="text"
-                      name={fieldName}
-                      value={editedRowValues[fieldName]}
-                      onChange={props.handleRowChange()}
-                      className="input-enabled"
-                    />
-                  ) : (
-                    <input
-                      disabled
-                      value={item[fieldName]} // value={rows[idx][fieldName]}
-                    />
-                  )}
-                </td>
-              ))}
-
-              <td>
-                { editedRowId !== item.idx ? (
-                  <button
-                    onClick={props.editRow(item.idx)}
-                    className="buttons"
-                  >
-                    <i className="far fa-edit edit-button"></i>
-                  </button>
-                ) : (
-                  <button
-                    onClick={props.saveRow(item.idx)}
-                    className="buttons save-button"
-                  >
-                    <i className="fa fa-save"></i>
-                  </button>
-                )}
-              </td>
-
-              <td>
-                <button
-                  onClick={props.deleteRow(item.idx)}
-                  className="buttons delete-button"
-                >
-                  <i className="far fa-trash-alt"></i>
-                </button>
-              </td>
-            </tr>
-          ))
-
-          )}
+          ))}
 
         </tbody>
       </table>

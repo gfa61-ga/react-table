@@ -3,26 +3,22 @@ import Table from './Components/Table';
 import Search from './Components/Search';
 import './App.css';
 import {apiData} from './initialData.js';
+import uuid from 'uuid/v4';
+
 
 class App extends React.Component {
   state = {
     query: "",
     editedRowId: "",
     editedRowValues: {},
-    rows: [{
-      name: "",
-      username: ""
-    }],
+    rows: []
   };
 
-  fieldNames = Object.keys(this.state.rows[0]);
+  fieldNames = ["name", "username"];
 
   componentDidMount() {
-
-
-    let data = apiData.map((row, i) =>{ return {...row, idx: i} })
     this.setState({
-      rows: data
+      rows: apiData
     })
 
   /*
@@ -39,22 +35,22 @@ class App extends React.Component {
   }
 
   addRow = () => {
-    const item = {};
+    const item = {id: uuid()};
     this.fieldNames.map((fieldName) => (
       item[fieldName]=""
     ))
     this.setState({
       rows: [...this.state.rows, item],
-      editedRowId: this.state.rows.length,
+      editedRowId: item.id,
       editedRowValues: item
     });
   };
 
-  editRow = (idx) => () => {
-    const editedRowId = idx
+  editRow = (id) => () => {
+    const editedRowId = id
     this.setState({
       editedRowId,
-      editedRowValues: this.state.rows[idx]
+      editedRowValues: (this.state.rows.filter((row)=>row.id===id))[0]
     })
   }
 
@@ -69,9 +65,16 @@ class App extends React.Component {
     });
   };
 
-  saveRow = idx => e => {
-    const rows = [...this.state.rows];
-    rows[idx] = {...this.state.editedRowValues};
+  saveRow = id => e => {
+    let rows = [...this.state.rows];
+    rows = rows.map((row)=> {
+
+      if (row.id!==id) {
+        return row
+      } else {
+        return {...row, ...this.state.editedRowValues}
+      }
+    })
     this.setState({
       rows,
       editedRowId: "",
@@ -79,9 +82,9 @@ class App extends React.Component {
     });
   };
 
-  deleteRow = (idx) => () => {
-    const rows = [...this.state.rows]
-    rows.splice(idx, 1)
+  deleteRow = (id) => () => {
+    let rows = [...this.state.rows]
+    rows = rows.filter((row)=>row.id!==id)
     this.setState({
       rows,
       editedRowId: ""
@@ -106,13 +109,15 @@ class App extends React.Component {
           query={this.state.query}
           editedRowId={this.state.editedRowId}
           editedRowValues={this.state.editedRowValues}
-          rows={this.state.rows}
+          rows={this.state.rows.filter( (row) => row["name"].includes(this.state.query) )}
           handleRowChange ={this.handleRowChange }
           editRow={this.editRow}
           saveRow={this.saveRow}
           deleteRow={this.deleteRow}
         />
-        <button className="buttons add-button" onClick={this.addRow}>Add <i className="fas fa-plus"></i></button>
+        { this.state.query === "" &&
+          <button className="buttons add-button" onClick={this.addRow}>Add <i className="fas fa-plus"></i></button>
+        }
       </div>
     );
   }
