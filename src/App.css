@@ -1,0 +1,96 @@
+.app-container {
+	width: 100%;
+}
+
+.app-container table {
+	width: 80%;
+	border-collapse: collapse;
+	min-width: 460px;
+}
+
+.app-container table tr {
+	min-height: 36px;
+	padding: 2px;
+	display: grid;
+	grid-template-columns: 40px  1fr 1fr 40px 40px;
+	justify-items: center;
+    align-items: center;
+}
+
+.app-container table td {
+	width: 80%;
+	text-align: center;
+}
+
+.app-container thead {
+	background-color: rgba(139, 179, 193, 0.5);
+}
+
+.app-container tr:nth-child(odd) {
+	background-color: rgba(230, 215, 221, 0.2);
+}
+
+.app-container tr:nth-child(even) {
+	background-color: rgba(193, 219, 166, 0.2);
+}
+
+/* Button styles */
+
+.buttons {
+	border: none;
+	border-radius: 10px;
+	text-align: center;
+	display: inline-block;
+	background-color: rgba(255, 250, 250, 1);
+	min-height: 34px;
+	font-size: 1em;
+	box-sizing: content-box;
+}
+
+.add-button {
+	color: rgba(232, 97, 44, 1);
+}
+
+.edit-button {
+	color: rgba(52, 139, 239, 0.93);
+}
+
+.save-button {
+	color: rgba(33, 181, 100, 0.96);
+}
+
+.delete-button {
+	color: rgba(213, 11, 11, 0.87);
+}
+
+.buttons:focus {
+	outline: none;
+}
+
+.buttons:hover {
+	background-color: rgba(241, 255, 240, 0.9);
+	font-size: 1.01em;
+}
+
+
+/* Input types */
+.app-container input {
+	width: 100%;
+	min-height: 32px;
+	border: none;
+	text-align: center;
+}
+
+.input-enabled {
+	background-color: white;
+}
+
+.app-container input:focus {
+	outline: none;
+}
+
+/* Search styles */
+.search {
+	width: 40%;
+	text-align: left;
+}
