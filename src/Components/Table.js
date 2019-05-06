@@ -26,20 +26,21 @@ function Table(props) {
                 {idx}
               </td>
 
-              {fieldNames.map((fieldName, i) => (
+              {fieldNames.map((fieldName) => (
                 <td key={fieldName}>
                   { editedRowId === item.id ? (
                     <input
                       type="text"
                       name={fieldName}
+                      className="input-enabled"
                       value={editedRowValues[fieldName]}
                       onChange={props.handleRowChange()}
-                      className="input-enabled"
                     />
                   ) : (
                     <input
                       disabled
                       value={rows[idx][fieldName]}
+                      onChange={()=>{}}
                     />
                   )}
                 </td>
