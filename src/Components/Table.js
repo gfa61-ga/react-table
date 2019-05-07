@@ -1,4 +1,5 @@
 import React from 'react';
+import Row from './Row';
 
 function Table(props) {
 
@@ -21,58 +22,18 @@ function Table(props) {
         <tbody>
 
           { rows.map((item, idx) => (
-            <tr key={item.id}>
-              <td>
-                {idx}
-              </td>
-
-              {fieldNames.map((fieldName) => (
-                <td key={fieldName}>
-                  { editedRowId === item.id ? (
-                    <input
-                      type="text"
-                      name={fieldName}
-                      className="input-enabled"
-                      value={editedRowValues[fieldName]}
-                      onChange={props.handleRowChange()}
-                    />
-                  ) : (
-                    <input
-                      disabled
-                      value={rows[idx][fieldName]}
-                      onChange={()=>{}}
-                    />
-                  )}
-                </td>
-              ))}
-
-              <td>
-                { editedRowId !== item.id ? (
-                  <button
-                    onClick={props.editRow(item.id)}
-                    className="buttons"
-                  >
-                    <i className="far fa-edit edit-button"></i>
-                  </button>
-                ) : (
-                  <button
-                    onClick={props.saveRow(item.id)}
-                    className="buttons save-button"
-                  >
-                    <i className="fa fa-save"></i>
-                  </button>
-                )}
-              </td>
-
-              <td>
-                <button
-                  onClick={props.deleteRow(item.id)}
-                  className="buttons delete-button"
-                >
-                  <i className="far fa-trash-alt"></i>
-                </button>
-              </td>
-            </tr>
+            <Row
+              isNewRow = {false}
+              item = {item}
+              fieldNames = {fieldNames}
+              editedRowValues = {editedRowValues}
+              editedRowId = {editedRowId}
+              idx= {idx}
+              handleRowChange ={props.handleRowChange }
+              editRow={props.editRow}
+              saveRow={props.saveRow}
+              deleteRow={props.deleteRow}
+            />
           ))}
 
         </tbody>
