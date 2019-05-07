@@ -19,10 +19,16 @@ class Row extends React.Component {
     });
   };
 
-  editRow = (id) => () => {
+  editRow = () => () => {
     this.setState({
       isEdited: true,
       editedRowValues: this.props.item
+    })
+  }
+
+  undoEditRow = () => () => {
+    this.setState({
+      isEdited: false
     })
   }
 
@@ -58,7 +64,7 @@ class Row extends React.Component {
         <td>
           { !this.state.isEdited ? (
             <button
-              onClick={this.editRow(item.id)}
+              onClick={this.editRow()}
               className="buttons"
             >
               <i className="far fa-edit edit-button"></i>
@@ -75,16 +81,29 @@ class Row extends React.Component {
             </button>
           )}
         </td>
-        { !isNewRow &&
-          <td>
-            <button
-              onClick={props.deleteRow(item.id)}
-              className="buttons delete-button"
-            >
-              <i className="far fa-trash-alt"></i>
-            </button>
-          </td>
+        { !isNewRow && !this.state.isEdited
+          &&
+            <td>
+              <button
+                onClick={props.deleteRow(item.id)}
+                className="buttons delete-button"
+              >
+                <i className="far fa-trash-alt"></i>
+              </button>
+            </td>
         }
+        { !isNewRow && this.state.isEdited
+          &&
+            <td>
+              <button
+                onClick={this.undoEditRow()}
+                className="buttons delete-button"
+              >
+                <i className="fa fa-undo"></i>
+              </button>
+            </td>
+        }
+
       </tr>
     );
   }
