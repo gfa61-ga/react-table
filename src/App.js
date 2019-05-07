@@ -2,26 +2,18 @@ import React from 'react';
 import Table from './Components/Table';
 import Search from './Components/Search';
 import './App.css';
-import {apiData} from './initialData.js';
 import uuid from 'uuid/v4';
-
 
 class App extends React.Component {
   state = {
     query: "",
-    editedRowId: "",
-    editedRowValues: {},
-    rows: []
+    rows: [],
+    addNewRow: false
   };
 
   fieldNames = ["name", "username"];
 
   componentDidMount() {
-    this.setState({
-      rows: apiData
-    })
-
-  /*
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(data => {
@@ -31,54 +23,38 @@ class App extends React.Component {
         })
       }
     )
-    */
   }
 
-  addRow = () => {
-    const item = {id: uuid()};
-    this.fieldNames.map((fieldName) => (
-      item[fieldName]=""
-    ))
+  addRow = (editedRowValues) => {
+    editedRowValues.id = uuid();
+    if (!editedRowValues.name) {
+      editedRowValues.name = ""
+    }
+
     this.setState({
-      rows: [...this.state.rows, item],
-      editedRowId: item.id,
-      editedRowValues: item
+      rows: [...this.state.rows, editedRowValues],
+      addNewRow: false
     });
   };
 
-  editRow = (id) => () => {
-    const editedRowId = id
+  showNewRow = () => {
     this.setState({
-      editedRowId,
-      editedRowValues: (this.state.rows.filter((row)=>row.id===id))[0]
-    })
+      addNewRow: true
+    });
   }
 
-  handleRowChange = () => e => {
-    const { name, value } = e.target;
-    let editedRowValues = {
-      ...this.state.editedRowValues,
-      [name]: value
-    };
-    this.setState({
-      editedRowValues
-    });
-  };
-
-  saveRow = id => e => {
+  saveRow = (id, editedRowValues) => {
     let rows = [...this.state.rows];
     rows = rows.map((row)=> {
 
       if (row.id!==id) {
         return row
       } else {
-        return {...row, ...this.state.editedRowValues}
+        return {...row, ...editedRowValues}
       }
     })
     this.setState({
-      rows,
-      editedRowId: "",
-      editedRowValues: {}
+      rows
     });
   };
 
@@ -86,13 +62,14 @@ class App extends React.Component {
     let rows = [...this.state.rows]
     rows = rows.filter((row)=>row.id!==id)
     this.setState({
-      rows,
-      editedRowId: ""
+      rows
     })
   }
 
   updateQuery = (userQuery) => {
-    const validateQuery = userQuery.replace(/[^a-zA-Z ]+|^\s/g, '').replace(/\s+/g, ' ');
+    const validateQuery =
+      userQuery.replace(/[^a-zA-Z ]+|^\s/g, '').replace(/\s+/g, ' ');
+
     this.setState({
       query: validateQuery
     });
@@ -106,17 +83,26 @@ class App extends React.Component {
         />
         <Table
           fieldNames={this.fieldNames}
+          addNewRow={this.state.addNewRow}
           query={this.state.query}
           editedRowId={this.state.editedRowId}
           editedRowValues={this.state.editedRowValues}
-          rows={this.state.rows.filter( (row) => row["name"].includes(this.state.query) )}
-          handleRowChange ={this.handleRowChange }
+          rows={this.state.rows.filter((row) =>
+            row["name"].includes(this.state.query)
+          )}
+          handleRowChange ={this.handleRowChange}
           editRow={this.editRow}
           saveRow={this.saveRow}
           deleteRow={this.deleteRow}
+          addRow={this.addRow}
         />
-        { this.state.query === "" &&
-          <button className="buttons add-button" onClick={this.addRow}>Add <i className="fas fa-plus"></i></button>
+        { this.state.addNewRow !== true &&
+          <button
+            className="buttons add-button"
+            onClick={this.showNewRow}
+          >
+            Add <i className="fas fa-plus"></i>
+          </button>
         }
       </div>
     );

@@ -3,7 +3,12 @@ import Row from './Row';
 
 function Table(props) {
 
-    let { fieldNames, editedRowId, editedRowValues, rows } = props;
+    let { fieldNames, rows } = props;
+    let newRow = {};
+    fieldNames.map((fieldName) => (
+      newRow[fieldName]=""
+    ))
+
     return (
       <table>
         <thead>
@@ -20,26 +25,32 @@ function Table(props) {
         </thead>
 
         <tbody>
-
           { rows.map((item, idx) => (
             <Row
+              key={item.id}
               isNewRow = {false}
               item = {item}
               fieldNames = {fieldNames}
-              editedRowValues = {editedRowValues}
-              editedRowId = {editedRowId}
               idx= {idx}
-              handleRowChange ={props.handleRowChange }
-              editRow={props.editRow}
               saveRow={props.saveRow}
               deleteRow={props.deleteRow}
             />
           ))}
-
+          { props.addNewRow &&
+            <Row
+              key={'new_row'}
+              newRow= {newRow}
+              isNewRow = {true}
+              item = {newRow}
+              fieldNames = {fieldNames}
+              idx= {"new"}
+              addRow={props.addRow}
+              deleteRow={props.deleteRow}
+            />
+          }
         </tbody>
       </table>
     );
-
 }
 
 export default Table;

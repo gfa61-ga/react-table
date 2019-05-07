@@ -3,7 +3,7 @@ import React from 'react';
 function Cell(props) {
   let { fieldName, value, isEdited } = props;
   return (
-    <td key={fieldName}>
+    <td >
         <input
           type="text"
           name={fieldName}
