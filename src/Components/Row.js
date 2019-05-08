@@ -4,7 +4,7 @@ import Cell from './Cell';
 class Row extends React.Component {
 
   state = {
-    isEdited: this.props.isNewRow ? true : false,
+    isEdited: this.props.isNewRow,
     editedRowValues: this.props.item
   };
 
