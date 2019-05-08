@@ -5,7 +5,7 @@ class Row extends React.Component {
 
   state = {
     isEdited: this.props.isNewRow ? true : false,
-    editedRowValues: this.props.newRow
+    editedRowValues: this.props.item
   };
 
   handleRowChange = () => e => {
@@ -21,8 +21,7 @@ class Row extends React.Component {
 
   editRow = () => () => {
     this.setState({
-      isEdited: true,
-      editedRowValues: this.props.item
+      isEdited: true
     })
   }
 
@@ -32,7 +31,7 @@ class Row extends React.Component {
     })
   }
 
-  saveRow = id => {
+  saveThisRow = id => () => {
     this.setState({
       isEdited: false
     });
@@ -48,62 +47,62 @@ class Row extends React.Component {
           {props.idx}
         </td>
 
-        {props.fieldNames.map((fieldName) => (
+        {props.fieldNames.map((fieldName) =>
           <Cell
             key={fieldName}
             handleRowChange ={this.handleRowChange }
             isEdited={this.state.isEdited}
             fieldName={fieldName}
-            value={!this.state.isEdited
-              ? item[fieldName]
-              : this.state.editedRowValues[fieldName]
+            value={this.state.isEdited
+              ? this.state.editedRowValues[fieldName]
+              : item[fieldName]
             }
           />
-        ))}
+        )}
 
         <td>
-          { !this.state.isEdited ? (
-            <button
-              onClick={this.editRow()}
-              className="buttons"
-            >
-              <i className="far fa-edit edit-button"></i>
-            </button>
-          ) : (
-            <button
-              onClick={isNewRow
-                ? () => {this.props.addRow(this.state.editedRowValues)}
-                : () => {this.saveRow(item.id)}
-              }
-              className="buttons save-button"
-            >
-              <i className="fa fa-save"></i>
-            </button>
-          )}
+          { this.state.isEdited
+            ?     /* If this row is edited, show "Save" button */
+              <button
+                onClick={isNewRow
+                  ? this.props.addRow(this.state.editedRowValues)
+                  : this.saveThisRow(item.id)
+                }
+                className="buttons save-button"
+              >
+                <i className="fa fa-save"></i>
+              </button>
+            :     /* else show "Edit" button */
+              <button
+                onClick={this.editRow()}
+                className="buttons"
+              >
+                <i className="far fa-edit edit-button"></i>
+              </button>
+          }
         </td>
-        { !isNewRow && !this.state.isEdited
-          &&
-            <td>
-              <button
-                onClick={props.deleteRow(item.id)}
-                className="buttons delete-button"
-              >
-                <i className="far fa-trash-alt"></i>
-              </button>
-            </td>
-        }
-        { !isNewRow && this.state.isEdited
-          &&
-            <td>
-              <button
-                onClick={this.undoEditRow()}
-                className="buttons delete-button"
-              >
-                <i className="fa fa-undo"></i>
-              </button>
-            </td>
-        }
 
+        {/* If this is a new row, don't show any button */}
+        { !isNewRow && this.state.isEdited && /* else if this row is edited show "Undo" button */
+          <td>
+            <button
+              onClick={this.undoEditRow()}
+              className="buttons delete-button"
+            >
+              <i className="fa fa-undo"></i>
+            </button>
+          </td>
+        }
+        { !isNewRow && !this.state.isEdited && /* else show "Delete" button */
+          <td>
+            <button
+              onClick={props.deleteRow(item.id)}
+              className="buttons delete-button"
+            >
+              <i className="far fa-trash-alt"></i>
+            </button>
+          </td>
+        }
       </tr>
     );
   }

@@ -8,16 +8,17 @@ class App extends React.Component {
   state = {
     query: "",
     rows: [],
-    addNewRow: false
+    addNewRow: false // When addNewRow is true,
+                     // the Table shows an extra empty row
   };
 
-  fieldNames = ["name", "username"];
+  fieldNames = ["name", "username"]; // Defines the fieldnames of rows,
+                                     // that we want to be displayed in Table
 
   componentDidMount() {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(data => {
-        data = data.map((row, i) =>{ return {...row, idx: i} })
         this.setState({
           rows: data
         })
@@ -25,28 +26,34 @@ class App extends React.Component {
     )
   }
 
-  addRow = (editedRowValues) => {
-    editedRowValues.id = uuid();
-    if (!editedRowValues.name) {
-      editedRowValues.name = ""
-    }
-
-    this.setState({
-      rows: [...this.state.rows, editedRowValues],
-      addNewRow: false
-    });
-  };
-
+  // Show a new empty row in Table component
   showNewRow = () => {
     this.setState({
       addNewRow: true
     });
   }
 
-  saveRow = (id, editedRowValues) => {
-    let rows = [...this.state.rows];
-    rows = rows.map((row)=> {
+  // Add to rows table, the values that are entered into the new empty row of Table component
+  addRow = (newRowValues) => () => {
+    newRowValues.id = uuid();
+    this.setState({
+      rows: [...this.state.rows, newRowValues],
+      addNewRow: false
+    });
+  };
 
+  deleteRow = (id) => () => {
+    let rows = this.state.rows.filter(row =>
+      row.id!==id
+    )
+    this.setState({
+      rows
+    })
+  }
+
+  // This function is called from saveThisRow() funtion of the Row component
+  saveRow = (id, editedRowValues) => {
+    let rows = this.state.rows.map((row)=> {
       if (row.id!==id) {
         return row
       } else {
@@ -57,14 +64,6 @@ class App extends React.Component {
       rows
     });
   };
-
-  deleteRow = (id) => () => {
-    let rows = [...this.state.rows]
-    rows = rows.filter((row)=>row.id!==id)
-    this.setState({
-      rows
-    })
-  }
 
   updateQuery = (userQuery) => {
     const validateQuery =
@@ -81,22 +80,19 @@ class App extends React.Component {
         <Search
           updateQuery={this.updateQuery}
         />
+
         <Table
           fieldNames={this.fieldNames}
           addNewRow={this.state.addNewRow}
-          query={this.state.query}
-          editedRowId={this.state.editedRowId}
-          editedRowValues={this.state.editedRowValues}
-          rows={this.state.rows.filter((row) =>
+          rows={this.state.rows.filter(row =>
             row["name"].includes(this.state.query)
           )}
-          handleRowChange ={this.handleRowChange}
-          editRow={this.editRow}
           saveRow={this.saveRow}
           deleteRow={this.deleteRow}
           addRow={this.addRow}
         />
-        { this.state.addNewRow !== true &&
+
+        { this.state.addNewRow !== true && /* Hide "Add" button, while adding a new row */
           <button
             className="buttons add-button"
             onClick={this.showNewRow}

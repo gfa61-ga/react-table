@@ -4,6 +4,8 @@ import Row from './Row';
 function Table(props) {
 
     let { fieldNames, rows } = props;
+
+    // Set initial values for a new empty row's object
     let newRow = {};
     fieldNames.map((fieldName) => (
       newRow[fieldName]=""
@@ -14,18 +16,20 @@ function Table(props) {
         <thead>
           <tr>
             <th> # </th>
-            {fieldNames.map((fieldName, i) => (
-              <th key={i}>
+
+            {fieldNames.map((fieldName) =>
+              <th key={fieldName}>
                 {fieldName}
               </th>
-            ))}
+            )}
+
             <th></th>
             <th></th>
           </tr>
         </thead>
 
         <tbody>
-          { rows.map((item, idx) => (
+          { rows.map((item, idx) =>
             <Row
               key={item.id}
               isNewRow = {false}
@@ -35,11 +39,11 @@ function Table(props) {
               saveRow={props.saveRow}
               deleteRow={props.deleteRow}
             />
-          ))}
+          )}
+
           { props.addNewRow &&
             <Row
               key={'new_row'}
-              newRow= {newRow}
               isNewRow = {true}
               item = {newRow}
               fieldNames = {fieldNames}
