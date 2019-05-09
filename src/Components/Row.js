@@ -1,5 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
+import { Table as SuiTable, Button } from 'semantic-ui-react'
 
 class Row extends React.Component {
 
@@ -42,10 +43,10 @@ class Row extends React.Component {
     let props = this.props
     let { item, isNewRow } = props;
     return (
-      <tr >
-        <td>
+      <SuiTable.Row>
+        <SuiTable.Cell>
           {props.idx}
-        </td>
+        </SuiTable.Cell>
 
         {props.fieldNames.map((fieldName) =>
           <Cell
@@ -60,50 +61,54 @@ class Row extends React.Component {
           />
         )}
 
-        <td>
+        <SuiTable.Cell>
           { this.state.isEdited
-            ?     /* If this row is edited, show "Save" button */
-              <button
+            ?     /* If this row is edited, show "Save" Button */
+              <Button
+                circular
                 onClick={isNewRow
                   ? this.props.addRow(this.state.editedRowValues)
                   : this.saveThisRow(item.id)
                 }
-                className="buttons save-button"
               >
                 <i className="fa fa-save"></i>
-              </button>
-            :     /* else show "Edit" button */
-              <button
+              </Button>
+            :     /* else show "Edit" Button */
+              <Button
+                circular
                 onClick={this.editRow()}
-                className="buttons"
               >
-                <i className="far fa-edit edit-button"></i>
-              </button>
+                <i className="far fa-edit edit-Button"></i>
+              </Button>
           }
-        </td>
+        </SuiTable.Cell>
 
-        {/* If this is a new row, don't show any button */}
-        { !isNewRow && this.state.isEdited && /* else if this row is edited show "Undo" button */
-          <td>
-            <button
+        {/* If this is a new row, don't show any Button */}
+        { !isNewRow && this.state.isEdited && /* else if this row is edited show "Undo" Button */
+          <SuiTable.Cell>
+            <Button
+              basic
+              color='red'
+              circular
               onClick={this.undoEditRow()}
-              className="buttons delete-button"
             >
               <i className="fa fa-undo"></i>
-            </button>
-          </td>
+            </Button>
+          </SuiTable.Cell>
         }
-        { !isNewRow && !this.state.isEdited && /* else show "Delete" button */
-          <td>
-            <button
+        { !isNewRow && !this.state.isEdited && /* else show "Delete" Button */
+          <SuiTable.Cell>
+            <Button
+              basic
+              color='red'
+              circular
               onClick={props.deleteRow(item.id)}
-              className="buttons delete-button"
             >
               <i className="far fa-trash-alt"></i>
-            </button>
-          </td>
+            </Button>
+          </SuiTable.Cell>
         }
-      </tr>
+      </SuiTable.Row>
     );
   }
 }

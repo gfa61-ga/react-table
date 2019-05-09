@@ -1,5 +1,6 @@
 import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
+import { Input } from 'semantic-ui-react'
 
 class Search extends React.Component {
 
@@ -9,14 +10,13 @@ class Search extends React.Component {
 
 	render() {
 		return (
-			<div className="search">
-				<DebounceInput
-					type="text"
-					placeholder="Search.."
-					onChange={this.onQueryChange}
-					debounceTimeout={500}
-				/>
-			</div>
+			<Input
+			  fluid
+			  type="text"
+				icon="search"
+				placeholder="Search.."
+				onChange={this.onQueryChange}
+			/>
 		);
 	}
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Row from './Row';
+import { Table as SuiTable } from 'semantic-ui-react'
 
 function Table(props) {
 
@@ -12,30 +13,30 @@ function Table(props) {
     ))
 
     return (
-      <table>
-        <thead>
-          <tr>
-            <th> # </th>
+      <SuiTable>
+        <SuiTable.Header>
+          <SuiTable.Row textAlign="center">
+            <SuiTable.HeaderCell textAlign="left"> # </SuiTable.HeaderCell>
 
             {fieldNames.map((fieldName) =>
-              <th key={fieldName}>
+              <SuiTable.HeaderCell key={fieldName}>
                 {fieldName}
-              </th>
+              </SuiTable.HeaderCell>
             )}
 
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
+            <SuiTable.HeaderCell></SuiTable.HeaderCell>
+            <SuiTable.HeaderCell></SuiTable.HeaderCell>
+          </SuiTable.Row>
+        </SuiTable.Header>
 
-        <tbody>
+        <SuiTable.Body>
           { rows.map((item, idx) =>
             <Row
               key={item.id}
               isNewRow = {false}
               item = {item}
               fieldNames = {fieldNames}
-              idx= {idx}
+              idx= {idx+1}
               saveRow={props.saveRow}
               deleteRow={props.deleteRow}
             />
@@ -52,8 +53,8 @@ function Table(props) {
               deleteRow={props.deleteRow}
             />
           }
-        </tbody>
-      </table>
+        </SuiTable.Body>
+      </SuiTable>
     );
 }
 

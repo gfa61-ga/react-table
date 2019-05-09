@@ -1,8 +1,8 @@
 import React from 'react';
 import Table from './Components/Table';
 import Search from './Components/Search';
-import './App.css';
 import uuid from 'uuid/v4';
+import { Container, Button} from "semantic-ui-react";
 
 class App extends React.Component {
   state = {
@@ -76,7 +76,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="app-container">
+      <Container>
         <Search
           updateQuery={this.updateQuery}
         />
@@ -93,14 +93,16 @@ class App extends React.Component {
         />
 
         { this.state.addNewRow !== true && /* Hide "Add" button, while adding a new row */
-          <button
-            className="buttons add-button"
+          <Button
+            basic
+            color='red'
+            circular
             onClick={this.showNewRow}
           >
             Add <i className="fas fa-plus"></i>
-          </button>
+          </Button>
         }
-      </div>
+      </Container>
     );
   }
 }
