@@ -35,7 +35,7 @@ function Table(props) {
               isNewRow = {false}
               item = {item}
               fieldNames = {fieldNames}
-              idx= {idx}
+              idx= {idx + 1}
               saveRow={props.saveRow}
               deleteRow={props.deleteRow}
             />
