@@ -78,7 +78,7 @@ class Row extends React.Component {
                 circular
                 onClick={this.editRow()}
               >
-                <i className="far fa-edit edit-Button"></i>
+                <i className="far fa-edit"></i>
               </Button>
           }
         </SuiTable.Cell>

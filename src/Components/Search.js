@@ -1,6 +1,6 @@
 import React from 'react';
-import { DebounceInput } from 'react-debounce-input';
 import { Input } from 'semantic-ui-react'
+import _ from 'lodash'
 
 class Search extends React.Component {
 
@@ -15,7 +15,13 @@ class Search extends React.Component {
 			  type="text"
 				icon="search"
 				placeholder="Search.."
-				onChange={this.onQueryChange}
+				onChange={_.debounce(
+					this.onQueryChange,
+					500,
+					{
+            leading: true,
+          }
+        )}
 			/>
 		);
 	}
